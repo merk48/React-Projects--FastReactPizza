@@ -2,8 +2,9 @@ import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import Menu, { loader as menuLoader } from "../features/menu/pages/Menu";
+
 import Cart from "../features/cart/pages/Cart";
-import Order from "../features/order/pages/Order";
+import Order, { loader as orderLoader } from "../features/order/pages/Order";
 import CreateOrder from "../features/order/pages/CreateOrder";
 import AppLayout from "./Layouts/AppLayout";
 import Error from "../shared/components/Error";
@@ -35,6 +36,8 @@ const router = createBrowserRouter([
       {
         path: "/order/:id",
         element: <Order />,
+        loader: orderLoader,
+        errorElement: <Error />,
       },
     ],
   },
