@@ -5,28 +5,34 @@ import Menu from "../features/menu/pages/Menu";
 import Cart from "../features/cart/pages/Cart";
 import Order from "../features/order/pages/Order";
 import CreateOrder from "../features/order/pages/CreateOrder";
+import AppLayout from "./components/AppLayout";
 
 //#region Routing
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/menu",
-    element: <Menu />,
-  },
-  {
-    path: "/cart",
-    element: <Cart />,
-  },
-  {
-    path: "/order/new",
-    element: <CreateOrder />,
-  },
-  {
-    path: "/order/:id",
-    element: <Order />,
+    element: <AppLayout />, // layout route
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/menu",
+        element: <Menu />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
+      },
+      {
+        path: "/order/new",
+        element: <CreateOrder />,
+      },
+      {
+        path: "/order/:id",
+        element: <Order />,
+      },
+    ],
   },
 ]);
 //#endregion
