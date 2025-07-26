@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
-import Menu from "../features/menu/pages/Menu";
+import Menu, { loader as menuLoader } from "../features/menu/pages/Menu";
 import Cart from "../features/cart/pages/Cart";
 import Order from "../features/order/pages/Order";
 import CreateOrder from "../features/order/pages/CreateOrder";
-import AppLayout from "./components/AppLayout";
+import AppLayout from "./Layouts/AppLayout";
 
 //#region Routing
 const router = createBrowserRouter([
@@ -17,8 +17,9 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/menu",
+        path: "/menu", // fetch on render route instead of fetch on render
         element: <Menu />,
+        loader: menuLoader,
       },
       {
         path: "/cart",

@@ -1,7 +1,7 @@
 import { formatCurrency } from "../../../shared/utils/helpers";
 
-function MenuItem({ pizza }) {
-  const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+function MenuItem({ item }) {
+  const { id, name, unitPrice, ingredients, soldOut, imageUrl } = item;
 
   return (
     <li>
