@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import Menu, { loader as menuLoader } from "../features/menu/pages/Menu";
-
 import Cart from "../features/cart/pages/Cart";
 import Order, { loader as orderLoader } from "../features/order/pages/Order";
 import CreateOrder, {
