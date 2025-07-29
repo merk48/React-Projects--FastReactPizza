@@ -27,11 +27,14 @@ export async function createOrder(newOrder) {
         "Content-Type": "application/json",
       },
     });
-
-    if (!res.ok) throw Error();
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`HTTP ${res.status} - ${errorText}`);
+    }
     const { data } = await res.json();
     return data;
-  } catch {
+  } catch (err) {
+    console.error(err);
     throw Error("Failed creating your order");
   }
 }

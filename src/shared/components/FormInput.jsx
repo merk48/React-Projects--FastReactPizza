@@ -4,6 +4,7 @@ function FormInput({
   placeholder = "",
   required = true,
   value = null,
+  defaultValue = null,
   onChange,
   className = "",
 }) {
@@ -16,6 +17,7 @@ function FormInput({
       placeholder={placeholder}
       required={required}
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
     />
   );

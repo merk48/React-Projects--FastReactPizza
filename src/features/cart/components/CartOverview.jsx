@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import LinkButton from "../../../shared/components/LinkButton";
-import Button from "../../../shared/components/Button";
 
 function CartOverview() {
   return (
@@ -9,7 +7,7 @@ function CartOverview() {
         <span>23 pizzas</span>
         <span>$23.45</span>
       </p>
-      <Button to="/cart">Open cart &rarr;</Button>
+      <Link to="/cart">Open cart &rarr;</Link>
     </div>
   );
 }

@@ -24,7 +24,7 @@ async function fetchAddress() {
 }
 
 const initialState = {
-  username: "Mery",
+  username: "",
   phonenumber: "",
   address: "",
 };
@@ -33,17 +33,8 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateName: {
-      payoad(username) {
-        return {
-          username:
-            username[0].toUpperCase() +
-            username.split("").splice(1).toLowerCase(),
-        };
-      },
-      reducer(state, action) {
-        state.username = action.payload;
-      },
+    updateName(state, action) {
+      state.username = action.payload;
     },
   },
 });

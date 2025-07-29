@@ -4,6 +4,7 @@ import FormInput from "../../../shared/components/FormInput";
 import Button from "../../../shared/components/Button";
 import FormBox from "../../../shared/components/FormBox";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -37,10 +38,11 @@ const fakeCart = [
 
 function CreateOrder() {
   const navigation = useNavigation();
+  const username = useSelector((state) => state.user.username);
   const isSubmitting = navigation.state === "submitting";
+
   const [withPriority, setWithPriority] = useState(true);
   const formErrors = useActionData();
-
   const cart = fakeCart;
 
   return (
@@ -49,7 +51,12 @@ function CreateOrder() {
 
       <Form method="POST" action="/order/new">
         <FormBox name="customer" label="First Name" errors={formErrors}>
-          <FormInput type="text" required={true} />
+          <FormInput
+            type="text"
+            name="customer"
+            required={true}
+            defaultValue={username}
+          />
         </FormBox>
 
         <FormBox name="phone" label="Phone number" errors={formErrors}>
@@ -78,6 +85,13 @@ function CreateOrder() {
             {isSubmitting ? "Placing order..." : "Order now"}
           </Button>
         </div>
+        {/* <div className="mb-4">
+          {formErrors?.exception && (
+            <span className="ml-auto rounded-md bg-red-100 px-1 text-xs font-semibold text-red-700 sm:text-sm">
+              ${formErrors.exception} &uarr;
+            </span>
+          )}
+        </div> */}
       </Form>
     </div>
   );
@@ -94,7 +108,7 @@ async function action({ request }) {
     const order = {
       ...data,
       cart: JSON.parse(data.cart),
-      priority: data.priority === "on",
+      priority: data.priority,
     };
 
     // validations
@@ -109,6 +123,7 @@ async function action({ request }) {
     return redirect(`/order/${newOrder.id}`);
   } catch (err) {
     errors.exception = err;
+    console.error(err);
     return errors;
   }
 }
