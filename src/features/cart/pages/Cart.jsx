@@ -1,5 +1,6 @@
 import Button from "../../../shared/components/Button";
 import LinkButton from "../../../shared/components/LinkButton";
+import CartItem from "../components/CartItem";
 
 const fakeCart = [
   {
@@ -29,17 +30,19 @@ function Cart() {
   const cart = fakeCart;
 
   return (
-    <div>
+    <div className="px-4 py-3">
       <LinkButton to="/menu">&larr; Back to menu</LinkButton>
-      <h2>Your cart, %NAME%</h2>
-
-      <div className="flex gap-4">
-        <Button type="primary" to="/order/new">
+      <h2 className="mt-7 text-xl font-semibold">Your cart, %NAME%</h2>
+      <ul className="my-3 flex flex-col divide-y divide-stone-200 border-b">
+        {cart.map((item) => (
+          <CartItem key={item.pizzaId} item={item} />
+        ))}
+      </ul>
+      <div className="flex justify-between gap-4">
+        <Button type="small" to="/order/new">
           Order pizzas
         </Button>
-        <Button type="small" className="">
-          Clear cart
-        </Button>
+        <Button type="secondary">Clear cart</Button>
       </div>
     </div>
   );
