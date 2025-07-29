@@ -2,6 +2,8 @@ import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../../services/apiRestaurant";
 import FormInput from "../../../shared/components/FormInput";
 import Button from "../../../shared/components/Button";
+import FormBox from "../../../shared/components/FormBox";
+import { useState } from "react";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -34,49 +36,38 @@ const fakeCart = [
 ];
 
 function CreateOrder() {
-  // const [withPriority, setWithPriority] = useState(false);
-
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-
+  const [withPriority, setWithPriority] = useState(true);
   const formErrors = useActionData();
-  console.log(formErrors);
 
   const cart = fakeCart;
+
   return (
-    <div>
-      <h2>{`Ready to order? Let's go!`}</h2>
+    <div className="px-4 py-6">
+      <h2 className="mb-8 text-xl font-semibold">{`Ready to order? Let's go!`}</h2>
 
       <Form method="POST" action="/order/new">
-        <FormInput
-          type="text"
-          name="customer"
-          label="First Name"
-          required={true}
-          errors={formErrors}
-        />
-        <FormInput
-          type="tel"
-          name="phone"
-          label="Phone number"
-          required={true}
-          errors={formErrors}
-        />
-        <FormInput
-          type="text"
-          name="address"
-          label="Address"
-          required={true}
-          errors={formErrors}
-        />
-        <div>
+        <FormBox name="customer" label="First Name" errors={formErrors}>
+          <FormInput type="text" required={true} />
+        </FormBox>
+
+        <FormBox name="phone" label="Phone number" errors={formErrors}>
+          <FormInput type="tel" name="phone" required={true} />
+        </FormBox>
+
+        <FormBox name="address" label="Address" errors={formErrors}>
+          <FormInput type="text" name="address" required={true} />
+        </FormBox>
+
+        <div className="mb-12 flex items-center gap-3">
           <input
-            className="h-6 w-6 accent-yellow-400 outline-none transition-all duration-300 focus:ring focus:ring-yellow-400 focus:ring-offset-2"
+            className={`h-6 w-6 accent-yellow-400 outline-none transition-all duration-300 ${withPriority ? "focus:ring focus:ring-yellow-400 focus:ring-offset-2" : ""} `}
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority">Want to yo give your order priority?</label>
         </div>
