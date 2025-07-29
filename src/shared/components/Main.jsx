@@ -1,5 +1,9 @@
 function Main({ children }) {
-  return <main>{children}</main>;
+  return (
+    <div className="overflow-scroll">
+      <main className="mx-auto max-w-3xl">{children}</main>
+    </div>
+  );
 }
 
 export default Main;

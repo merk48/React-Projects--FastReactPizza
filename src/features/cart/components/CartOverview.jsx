@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
+import LinkButton from "../../../shared/components/LinkButton";
+import Button from "../../../shared/components/Button";
 
 function CartOverview() {
   return (
-    <div>
-      <p>
+    <div className="flex items-center justify-between text-sm uppercase text-stone-200 md:text-base">
+      <p className="space-x-4 font-semibold text-stone-300">
         <span>23 pizzas</span>
         <span>$23.45</span>
       </p>
-      <Link to="/cart">Open cart &rarr;</Link>
+      <Button to="/cart">Open cart &rarr;</Button>
     </div>
   );
 }

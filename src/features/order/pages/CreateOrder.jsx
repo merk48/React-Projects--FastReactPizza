@@ -1,6 +1,9 @@
-import { useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../../services/apiRestaurant";
+import FormInput from "../../../shared/components/FormInput";
+import Button from "../../../shared/components/Button";
+import FormBox from "../../../shared/components/FormBox";
+import { useState } from "react";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -33,56 +36,47 @@ const fakeCart = [
 ];
 
 function CreateOrder() {
-  // const [withPriority, setWithPriority] = useState(false);
-
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-
+  const [withPriority, setWithPriority] = useState(true);
   const formErrors = useActionData();
-  console.log(formErrors);
 
   const cart = fakeCart;
+
   return (
-    <div>
-      <h2>Ready to order? Let's go!</h2>
+    <div className="px-4 py-6">
+      <h2 className="mb-8 text-xl font-semibold">{`Ready to order? Let's go!`}</h2>
 
       <Form method="POST" action="/order/new">
-        <div>
-          <label>First Name</label>
-          <input type="text" name="customer" required />
-        </div>
+        <FormBox name="customer" label="First Name" errors={formErrors}>
+          <FormInput type="text" required={true} />
+        </FormBox>
 
-        <div>
-          <label>Phone number</label>
-          <div>
-            <input type="tel" name="phone" required />
-          </div>
-          {formErrors?.phone && <p>{formErrors.phone}</p>}
-        </div>
+        <FormBox name="phone" label="Phone number" errors={formErrors}>
+          <FormInput type="tel" name="phone" required={true} />
+        </FormBox>
 
-        <div>
-          <label>Address</label>
-          <div>
-            <input type="text" name="address" required />
-          </div>
-        </div>
+        <FormBox name="address" label="Address" errors={formErrors}>
+          <FormInput type="text" name="address" required={true} />
+        </FormBox>
 
-        <div>
+        <div className="mb-12 flex items-center gap-3">
           <input
+            className={`h-6 w-6 accent-yellow-400 outline-none transition-all duration-300 ${withPriority ? "focus:ring focus:ring-yellow-400 focus:ring-offset-2" : ""} `}
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority">Want to yo give your order priority?</label>
         </div>
 
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <button disabled={isSubmitting}>
+          <Button type="primary" disabled={isSubmitting}>
             {isSubmitting ? "Placing order..." : "Order now"}
-          </button>
+          </Button>
         </div>
       </Form>
     </div>
