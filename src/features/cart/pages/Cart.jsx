@@ -35,7 +35,7 @@ function Cart() {
 
       <div className="flex gap-4">
         <Button to="/order/new">Order pizzas</Button>
-        <Button className="opacity-80">Clear cart</Button>
+        <Button className="">Clear cart</Button>
       </div>
     </div>
   );
