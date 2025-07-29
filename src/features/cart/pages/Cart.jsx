@@ -34,8 +34,12 @@ function Cart() {
       <h2>Your cart, %NAME%</h2>
 
       <div className="flex gap-4">
-        <Button to="/order/new">Order pizzas</Button>
-        <Button className="">Clear cart</Button>
+        <Button type="primary" to="/order/new">
+          Order pizzas
+        </Button>
+        <Button type="small" className="">
+          Clear cart
+        </Button>
       </div>
     </div>
   );
