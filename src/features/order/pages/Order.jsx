@@ -8,6 +8,9 @@ import {
   formatDate,
 } from "../../../shared/utils/helpers";
 import OrderItem from "../components/OrderItem";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../cart/context/cartSlice";
+import { useEffect } from "react";
 
 // const order = {
 //   id: "ABCDEF",
