@@ -11,6 +11,7 @@ import OrderItem from "../components/OrderItem";
 import { useDispatch } from "react-redux";
 import { clearCart } from "../../cart/context/cartSlice";
 import { useEffect } from "react";
+import UpdateOrder from "../components/UpdateOrder";
 
 // const order = {
 //   id: "ABCDEF",
@@ -122,6 +123,8 @@ function Order() {
           To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
         </p>
       </div>
+
+      {!priority && <UpdateOrder />}
     </div>
   );
 }
