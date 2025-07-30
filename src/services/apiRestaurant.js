@@ -1,21 +1,35 @@
 const API_URL = "https://react-fast-pizza-api.jonas.io/api";
 
 export async function getMenu() {
-  const res = await fetch(`${API_URL}/menu`);
+  try {
+    const res = await fetch(`${API_URL}/menu`);
 
-  // fetch won't throw error on 400 errors (e.g. when URL is wrong), so we need to do it manually. This will then go into the catch block, where the message is set
-  if (!res.ok) throw Error("Failed getting menu");
-
-  const { data } = await res.json();
-  return data;
+    // fetch won't throw error on 400 errors (e.g. when URL is wrong), so we need to do it manually. This will then go into the catch block, where the message is set
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`HTTP ${res.status} - ${errorText}`);
+    }
+    const { data } = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw Error(err);
+  }
 }
 
 export async function getOrder(id) {
-  const res = await fetch(`${API_URL}/order/${id}`);
-  if (!res.ok) throw Error(`Couldn't find order #${id}`);
-
-  const { data } = await res.json();
-  return data;
+  try {
+    const res = await fetch(`${API_URL}/order/${id}`);
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`HTTP ${res.status} - ${errorText}`);
+    }
+    const { data } = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw Error(err);
+  }
 }
 
 export async function createOrder(newOrder) {
@@ -27,12 +41,15 @@ export async function createOrder(newOrder) {
         "Content-Type": "application/json",
       },
     });
-
-    if (!res.ok) throw Error();
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`HTTP ${res.status} - ${errorText}`);
+    }
     const { data } = await res.json();
     return data;
-  } catch {
-    throw Error("Failed creating your order");
+  } catch (err) {
+    console.error(err);
+    throw Error(err);
   }
 }
 
@@ -45,10 +62,12 @@ export async function updateOrder(id, updateObj) {
         "Content-Type": "application/json",
       },
     });
-
-    if (!res.ok) throw Error();
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`HTTP ${res.status} - ${errorText}`);
+    }
     // We don't need the data, so we don't return anything
   } catch (err) {
-    throw Error("Failed updating your order");
+    throw Error(err);
   }
 }
