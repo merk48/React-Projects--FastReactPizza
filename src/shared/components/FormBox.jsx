@@ -16,9 +16,9 @@ function FormBox({
         )}
         {children}
       </div>
-      {errors && (
-        <span className="ml-auto rounded-md bg-red-100 px-1 text-xs font-semibold text-red-700 sm:text-sm">
-          {errors?.[name] && `${errors[name]} &uarr;`}
+      {errors?.[name] && (
+        <span className="ml-auto rounded-md bg-red-100 px-1 py-1 text-xs font-semibold text-red-700 sm:text-sm">
+          {`${errors[name]} ↑`}
         </span>
       )}
     </div>
