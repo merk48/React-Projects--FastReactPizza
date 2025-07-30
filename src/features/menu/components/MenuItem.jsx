@@ -1,10 +1,13 @@
 import { formatCurrency } from "../../../shared/utils/helpers";
 import Button from "../../../shared/components/Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../../cart/context/cartSlice";
+import DeleteItem from "../../cart/components/DeleteItem";
 
 function MenuItem({ item }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = item;
+
+  // const isItemInCart = useSelector();
 
   const dispatch = useDispatch();
 
@@ -32,14 +35,17 @@ function MenuItem({ item }) {
           <p className="text-sm font-medium uppercase">
             {!soldOut ? formatCurrency(unitPrice) : "Sold out"}
           </p>
-          <Button
-            type="small"
-            className="my-auto"
-            disabled={soldOut}
-            onClick={handleAddToCart}
-          >
-            Add to Cart
-          </Button>
+          <div className="space-x-2">
+            {!soldOut && <DeleteItem id={id} />}
+            <Button
+              type="small"
+              className="my-auto"
+              disabled={soldOut}
+              onClick={handleAddToCart}
+            >
+              Add to Cart
+            </Button>
+          </div>
         </div>
       </div>
     </li>
