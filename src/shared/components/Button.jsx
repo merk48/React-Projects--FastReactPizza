@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function Button({
   children,
   type = "primary",
-  disabled,
+  disabled = false,
   onClick,
   to = null,
   className = "",

@@ -7,7 +7,7 @@ function FormBox({
   className = "",
 }) {
   return (
-    <div className={`mb-5 flex flex-col gap-1 ${className}`}>
+    <div className={`relative mb-5 flex flex-col gap-1 ${className}`}>
       <div className="flex flex-col justify-between sm:flex-row sm:items-center">
         {label && (
           <label className="mb-3 ml-0.5 sm:m-0 sm:basis-40" htmlFor={name}>

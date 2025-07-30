@@ -3,6 +3,7 @@ function FormInput({
   type = "text",
   placeholder = "",
   required = true,
+  disabled = false,
   value = null,
   defaultValue = null,
   onChange,
@@ -16,6 +17,7 @@ function FormInput({
       id={name}
       placeholder={placeholder}
       required={required}
+      disabled={disabled}
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}

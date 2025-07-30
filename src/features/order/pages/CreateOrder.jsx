@@ -4,7 +4,7 @@ import FormInput from "../../../shared/components/FormInput";
 import Button from "../../../shared/components/Button";
 import FormBox from "../../../shared/components/FormBox";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   clearCart,
   getCart,
@@ -13,6 +13,7 @@ import {
 import EmptyCart from "../../cart/components/EmptyCart";
 import store from "../../../store";
 import { formatCurrency } from "../../../shared/utils/helpers";
+import { fetchAddress } from "../../user/context/userSlice";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -22,7 +23,14 @@ const isValidPhone = (str) =>
 
 function CreateOrder() {
   const navigation = useNavigation();
-  const username = useSelector((state) => state.user.username);
+  const {
+    username,
+    status: addressStatus,
+    position,
+    address,
+  } = useSelector((state) => state.user);
+  const isLoadingAddress = addressStatus === "loading";
+
   const isSubmitting = navigation.state === "submitting";
 
   const [withPriority, setWithPriority] = useState(true);
@@ -33,14 +41,23 @@ function CreateOrder() {
   const priorityPrice = withPriority ? totalCartPrice * 0.2 : 0;
   const totalPrice = totalCartPrice + priorityPrice;
 
+  const dispatch = useDispatch();
+
   console.log(cart);
   console.log(formErrors);
+
+  function handleGetPossion(e) {
+    e.preventDefault();
+    dispatch(fetchAddress());
+  }
 
   if (!cart.length) return <EmptyCart />;
 
   return (
     <div className="px-4 py-6">
       <h2 className="mb-8 text-xl font-semibold">{`Ready to order? Let's go!`}</h2>
+
+      {/* <button onClick={() => dispatch(fetchAddress())}>Get possiosn</button> */}
 
       <Form method="POST" action="/order/new">
         <FormBox name="customer" label="First Name" errors={formErrors}>
@@ -57,7 +74,31 @@ function CreateOrder() {
         </FormBox>
 
         <FormBox name="address" label="Address" errors={formErrors}>
-          <FormInput type="text" name="address" required={true} />
+          <FormInput
+            type="text"
+            name="address"
+            required={true}
+            disabled={isLoadingAddress}
+            defaultValue={address}
+          />
+          {!(position.latitude && position.longitude) && (
+            <button
+              className="absolute bottom-10 right-2 text-xs font-semibold uppercase text-stone-500 underline"
+              disabled={isLoadingAddress}
+              onClick={handleGetPossion}
+            >
+              Get possiosn
+            </button>
+          )}
+
+          {/* <Button
+            type="small"
+             disabled={isLoadingAddress}
+            className="absolute right-0 z-50 text-xs font-semibold text-stone-500"
+            onClick={handleGetPossion}
+          >
+            Get possiosn
+          </Button> */}
         </FormBox>
 
         <div className="mb-12 flex items-center gap-3">
@@ -74,7 +115,7 @@ function CreateOrder() {
 
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <Button type="primary" disabled={isSubmitting}>
+          <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
               ? "Placing order..."
               : `Order now from ${formatCurrency(totalPrice)}`}
