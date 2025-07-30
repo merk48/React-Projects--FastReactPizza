@@ -28,9 +28,9 @@ function CreateOrder() {
     status: addressStatus,
     position,
     address,
+    error: addressError,
   } = useSelector((state) => state.user);
   const isLoadingAddress = addressStatus === "loading";
-
   const isSubmitting = navigation.state === "submitting";
 
   const [withPriority, setWithPriority] = useState(true);
@@ -42,9 +42,6 @@ function CreateOrder() {
   const totalPrice = totalCartPrice + priorityPrice;
 
   const dispatch = useDispatch();
-
-  console.log(cart);
-  console.log(formErrors);
 
   function handleGetPossion(e) {
     e.preventDefault();
@@ -73,7 +70,20 @@ function CreateOrder() {
           <FormInput type="tel" name="phone" required={true} />
         </FormBox>
 
-        <FormBox name="address" label="Address" errors={formErrors}>
+        <FormBox
+          name="address"
+          label="Address"
+          errors={{
+            ...formErrors,
+            ...(addressStatus === "error" && addressError
+              ? {
+                  address: formErrors?.address
+                    ? formErrors?.address + " " + addressError
+                    : addressError,
+                }
+              : {}),
+          }}
+        >
           <FormInput
             type="text"
             name="address"
@@ -83,17 +93,16 @@ function CreateOrder() {
           />
           {!(position.latitude && position.longitude) && (
             <button
-              className="absolute bottom-10 right-2 text-xs font-semibold uppercase text-stone-500 underline"
+              className="absolute right-3 top-10 text-xs font-semibold uppercase text-yellow-600 sm:top-1"
               disabled={isLoadingAddress}
               onClick={handleGetPossion}
             >
-              Get possiosn
+              {isLoadingAddress ? "Geting position..." : "Get position"}
             </button>
           )}
-
           {/* <Button
             type="small"
-             disabled={isLoadingAddress}
+            disabled={isLoadingAddress}
             className="absolute right-0 z-50 text-xs font-semibold text-stone-500"
             onClick={handleGetPossion}
           >
@@ -115,6 +124,15 @@ function CreateOrder() {
 
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+          <input
+            type="hidden"
+            name="position"
+            value={
+              position.latitude && position.longitude
+                ? ` ${position.latitude}, ${position.longitude}`
+                : ""
+            }
+          />
           <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
               ? "Placing order..."
@@ -144,10 +162,9 @@ async function action({ request }) {
     const order = {
       ...data,
       cart: JSON.parse(data.cart),
-      priority: data.priority,
-      // priority: data.priority === 'true',
+      priority: data.priority === "true",
     };
-    console.log("order " + order);
+
     // validations
     if (!isValidPhone(order.phone))
       errors.phone =
@@ -156,7 +173,6 @@ async function action({ request }) {
     if (Object.keys(errors).length > 0) return errors;
 
     const newOrder = await createOrder(order);
-    console.log("newOrder " + newOrder);
 
     // This will be replaced later (bad for performance)
     store.dispatch(clearCart());
