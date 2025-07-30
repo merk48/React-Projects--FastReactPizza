@@ -1,8 +1,24 @@
 import { formatCurrency } from "../../../shared/utils/helpers";
 import Button from "../../../shared/components/Button";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../cart/context/cartSlice";
 
 function MenuItem({ item }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = item;
+
+  const dispatch = useDispatch();
+
+  function handleAddToCart() {
+    const newItem = {
+      pizzaId: id,
+      name: name,
+      quanity: 1,
+      unitPrice,
+      totalPrice: unitPrice * 1,
+    };
+
+    dispatch(addItem(newItem));
+  }
 
   return (
     <li className={`flex gap-4 py-2 ${soldOut ? "opacity-60 grayscale" : ""}`}>
@@ -16,7 +32,12 @@ function MenuItem({ item }) {
           <p className="text-sm font-medium uppercase">
             {!soldOut ? formatCurrency(unitPrice) : "Sold out"}
           </p>
-          <Button type="small" className="my-auto" disabled={soldOut}>
+          <Button
+            type="small"
+            className="my-auto"
+            disabled={soldOut}
+            onClick={handleAddToCart}
+          >
             Add to Cart
           </Button>
         </div>
